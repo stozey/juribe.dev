@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+nn<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -383,6 +383,21 @@
     }
     section, nav, footer { position: relative; z-index: 1; }
 
+    /* ── CURSOR AURA ── */
+    #cursor-aura {
+      position: fixed;
+      top: 0; left: 0;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,255,0.10) 0%, rgba(123,97,255,0.04) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.4s ease;
+      opacity: 0;
+      will-change: transform;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
@@ -398,6 +413,7 @@
 
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
+<div id="cursor-aura"></div>
 
 <!-- ── NAV ── -->
 <nav>
@@ -710,5 +726,31 @@
   <div class="footer-copy">Built with HTML & CSS</div>
 </footer>
 
+<script>
+  (function() {
+    var aura = document.getElementById('cursor-aura');
+    var mouseX = 0, mouseY = 0;
+    var rafId = null;
+
+    document.addEventListener('mousemove', function(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      aura.style.opacity = '1';
+      if (!rafId) {
+        rafId = requestAnimationFrame(moveAura);
+      }
+    });
+
+    document.addEventListener('mouseleave', function() {
+      aura.style.opacity = '0';
+    });
+
+    function moveAura() {
+      aura.style.left = mouseX + 'px';
+      aura.style.top = mouseY + 'px';
+      rafId = null;
+    }
+  })();
+</script>
 </body>
 </html>
